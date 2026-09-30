@@ -69,6 +69,13 @@ parser.add_argument(
     default=-1,
 )
 
+parser.add_argument(
+    "--tupleout",
+    help="ROOT ntuple output file for JetAnalyzer",
+    type=str,
+    default="tuples.root",
+)
+
 the_args = parser.parse_known_args()[0]
 
 algList = []
@@ -158,7 +165,7 @@ FilterTrk_jets.Parameters = {
     "NHitsVertex": ["0"], # Minimum number of hits on vertex detector
     "NHitsTotal": ["3"], # Minimum number of hits on track
     "MaxHoles": ["5"], # maximum number of holes
-    "MaxOutliers": ["20"], 
+    "MaxOutliers": ["20"],
     "MinNdf": ["17"], # minimum value for ndf
     "OutputTrackCollectionName": [ TRK_FILTER ],
     "NNmethod": [""],
@@ -462,7 +469,7 @@ MyJetAnalyzer.ProcessorType = "JetAnalyzer"
 MyJetAnalyzer.Parameters = {
                             "GenJetCollection": ["GenJet_VLC"],
                             "MCParticleCollectionName": ["MCParticle"],
-                            "OutputRootFileName": ["tuples.root"],
+                            "OutputRootFileName": [the_args.tupleout],
                             "RECOParticleCollectionName": ["PandoraPFOs"],
                             "ProcessName": ["dijet"],
                             #"RecoJetCollection": ["JetOut_kt"],
@@ -475,8 +482,8 @@ MyJetAnalyzer.Parameters = {
 
 ### Modify timing threshold (by Massimo C.)
 DDSimpleMuonDigi.Parameters["CalibrMUON"] = ["1."]
-DDSimpleMuonDigi.Parameters["MuonTimeThreshold"] = ["1e-07"]                                 
-DDSimpleMuonDigi.Parameters["MuonThreshold"] = ["1e-07"]   
+DDSimpleMuonDigi.Parameters["MuonTimeThreshold"] = ["1e-07"]
+DDSimpleMuonDigi.Parameters["MuonThreshold"] = ["1e-07"]
 
 #### Execution list
 
@@ -537,8 +544,8 @@ algList.append(JET_kt_LCTuple)
 algList.append(TrueJets)
 
 # Output
-#algList.append(LCIOWriter_all)
-algList.append(LCIOWriter_light)
+algList.append(LCIOWriter_all)
+#algList.append(LCIOWriter_light)
 
 from Configurables import ApplicationMgr
 ApplicationMgr( TopAlg = algList,
@@ -547,5 +554,3 @@ ApplicationMgr( TopAlg = algList,
                 ExtSvc = [evtsvc],
                 OutputLevel = DEBUG
               )
-
-

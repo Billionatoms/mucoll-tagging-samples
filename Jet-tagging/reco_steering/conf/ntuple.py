@@ -75,6 +75,7 @@ TrueJets = MarlinProcessorWrapper("TrueJets")
 TrueJets.OutputLevel = DEBUG
 TrueJets.ProcessorType = "LCTuple"
 TrueJets.Parameters = {
+    "MCParticleCollection": ["MCParticle"],
     "JetCollection": ["GenJet_VLC"],
     "WriteJetCollectionParameters": ["true"],
     "JetCollectionDaughtersParameters": ["true"],
@@ -95,6 +96,3 @@ JET_kt_LCTuple.Parameters = {
     "JetCollectionTaggingParameters": ["false"],
     "VertexCollection": ["BuildUpVertices"]
 }
-
-
-
