@@ -1,0 +1,179 @@
+<!-- Pandora settings xml file -->
+
+<pandora>
+    <!-- GLOBAL SETTINGS -->
+    <IsMonitoringEnabled>true</IsMonitoringEnabled>
+    <ShouldDisplayAlgorithmInfo>false</ShouldDisplayAlgorithmInfo>
+    <ShouldCollapseMCParticlesToPfoTarget>true</ShouldCollapseMCParticlesToPfoTarget>
+
+    <!-- PLUGIN REGISTRATION -->
+    <HadronicEnergyCorrectionPlugins>SoftwareCompensation</HadronicEnergyCorrectionPlugins>
+    <EmShowerPlugin>LCEmShowerId</EmShowerPlugin>
+    <PhotonPlugin>LCPhotonId</PhotonPlugin>
+    <ElectronPlugin>LCElectronId</ElectronPlugin>
+    <MuonPlugin>LCMuonId</MuonPlugin>
+
+    <!-- PLUGIN SETTINGS -->
+    <LCMuonId>
+        <MinMuonTrackSegmentHitsCut>5</MinMuonTrackSegmentHitsCut>
+        <MuonRmsCut>15.625</MuonRmsCut>
+    </LCMuonId>
+
+    <!-- ALGORITHM SETTINGS -->
+
+    <!-- Set calo hit properties, then select tracks and hits to use for clustering -->
+    <algorithm type = "CaloHitPreparation">
+        <IsolationNLayers>1</IsolationNLayers>
+        <IsolationCutDistanceFine>15.</IsolationCutDistanceFine>
+        <IsolationMaxNearbyHits>1</IsolationMaxNearbyHits>
+    </algorithm>
+    <algorithm type = "EventPreparation">
+        <OutputTrackListName>Tracks</OutputTrackListName>
+        <OutputCaloHitListName>CaloHits</OutputCaloHitListName>
+        <OutputMuonCaloHitListName>MuonYokeHits</OutputMuonCaloHitListName>
+        <ReplacementTrackListName>Tracks</ReplacementTrackListName>
+        <ReplacementCaloHitListName>CaloHits</ReplacementCaloHitListName>
+    </algorithm>
+
+    <!-- Standalone photon clustering -->
+    <!--algorithm type = "PhotonReconstruction">
+            <ConeApproachMaxSeparation>250.</ConeApproachMaxSeparation>
+        </algorithm>
+        <ClusterListName>PhotonClusters</ClusterListName>
+        <ReplaceCurrentClusterList>false</ReplaceCurrentClusterList>
+        <ShouldMakePdfHistograms>false</ShouldMakePdfHistograms>
+        <HistogramFile>/home/gianelle/EUS/MuSIC_v2/conf/PandoraSettings/PandoraLikelihoodData12EBin.xml</HistogramFile>
+    </algorithm-->
+
+
+    <!-- Clustering parent algorithm runs a daughter clustering algorithm -->
+    <algorithm type = "ClusteringParent">
+        <algorithm type = "ConeClustering" description = "ClusterFormation">
+            <ClusterSeedStrategy>0</ClusterSeedStrategy>
+            <ClusterFormationStrategy>1</ClusterFormationStrategy>
+            <ShouldUseTrackSeed>false</ShouldUseTrackSeed>
+            <LayersToStepBackFine>1</LayersToStepBackFine>
+            <LayersToStepBackCoarse>1</LayersToStepBackCoarse>
+            <SameLayerPadWidthsFine>2</SameLayerPadWidthsFine>
+            <SameLayerPadWidthsCoarse>2</SameLayerPadWidthsCoarse>
+            <TanConeAngleFine>0.4</TanConeAngleFine>
+            <TanConeAngleCoarse>0.4</TanConeAngleCoarse>
+            <AdditionalPadWidthsFine>1.5</AdditionalPadWidthsFine>
+            <AdditionalPadWidthsCoarse>1.5</AdditionalPadWidthsCoarse>
+            <ShouldUseIsolatedHits>false</ShouldUseIsolatedHits>
+            <ShouldUseOnlyECalHits>false</ShouldUseOnlyECalHits>
+        </algorithm>
+        <!--algorithm type = "TopologicalAssociationParent" description = "ClusterAssociation">
+            <associationAlgorithms>
+                <algorithm type = "LoopingTracks"/>
+                <algorithm type = "BrokenTracks"/>
+                <algorithm type = "ShowerMipMerging"/>
+                <algorithm type = "ShowerMipMerging2"/>
+                <algorithm type = "BackscatteredTracks"/>
+                <algorithm type = "BackscatteredTracks2"/>
+                <algorithm type = "ShowerMipMerging3"/>
+                <algorithm type = "ShowerMipMerging4"/>
+                <algorithm type = "ProximityBasedMerging">
+                    <algorithm type = "TrackClusterAssociation"/>
+                </algorithm>
+                <algorithm type = "ConeBasedMerging">
+                    <algorithm type = "TrackClusterAssociation"/>
+                </algorithm>
+                <algorithm type = "MipPhotonSeparation">
+                    <algorithm type = "TrackClusterAssociation"/>
+                </algorithm>
+                <algorithm type = "HighEnergyPhotonRecovery">
+                    <algorithm type = "TrackClusterAssociation"/>
+                    <AdditionalClusterListNames>PhotonClusters</AdditionalClusterListNames>
+                </algorithm>
+                <algorithm type = "SoftClusterMerging">
+                    <algorithm type = "TrackClusterAssociation"/>
+                    <AdditionalClusterListNames>PhotonClusters</AdditionalClusterListNames>
+                </algorithm>
+                <algorithm type = "IsolatedHitMerging">
+                    <AdditionalClusterListNames>PhotonClusters</AdditionalClusterListNames>
+                </algorithm>
+            </associationAlgorithms>
+        </algorithm-->
+        <ClusterListName>PrimaryClusters</ClusterListName>
+        <ReplaceCurrentClusterList>true</ReplaceCurrentClusterList>
+    </algorithm> 
+
+    <!-- Muon clustering -->
+    <!--algorithm type = "ClusteringParent">
+        <algorithm type = "ConeClustering" description = "ClusterFormation">
+            <TanConeAngleCoarse>0.75</TanConeAngleCoarse>
+            <AdditionalPadWidthsCoarse>12.5</AdditionalPadWidthsCoarse>
+            <SameLayerPadWidthsCoarse>14</SameLayerPadWidthsCoarse>
+            <ShouldUseTrackSeed>false</ShouldUseTrackSeed>
+            <MaxClusterDirProjection>1000</MaxClusterDirProjection>
+            <MaxTrackSeedSeparation>0</MaxTrackSeedSeparation>
+            <MaxLayersToTrackSeed>0</MaxLayersToTrackSeed>
+            <MaxLayersToTrackLikeHit>0</MaxLayersToTrackLikeHit>
+            <TrackPathWidth>0</TrackPathWidth>
+        </algorithm>
+        <InputCaloHitListName>MuonRemovedYokeHits</InputCaloHitListName>
+        <RestoreOriginalCaloHitList>true</RestoreOriginalCaloHitList>
+        <ClusterListName>MuonRemovedYokeClusters</ClusterListName>
+        <ReplaceCurrentClusterList>false</ReplaceCurrentClusterList>
+    </algorithm>
+
+    <algorithm type = "MuonClusterAssociation">
+        <TargetClusterListName>PrimaryClusters</TargetClusterListName>
+        <MuonClusterListName>MuonRemovedYokeClusters</MuonClusterListName>
+        <MinHitsInMuonCluster>3</MinHitsInMuonCluster>
+        <CoilCorrectionMinInnerRadius>3483</CoilCorrectionMinInnerRadius>
+    </algorithm-->
+
+    <!-- Photon recovery -->
+    <!--algorithm type = "PhotonRecovery">
+        <algorithm type = "TrackClusterAssociation"/>
+    </algorithm>
+
+    <algorithm type = "MuonPhotonSeparation">
+        <algorithm type = "TrackClusterAssociation"/>
+    </algorithm-->
+
+    <!-- Prepare particle flow objects -->
+    <algorithm type = "TrackPreparation">
+        <CandidateListNames>Input</CandidateListNames>
+        <MergedCandidateListName>PfoCandidates</MergedCandidateListName>
+        <PfoTrackListName>PfoCreation</PfoTrackListName>
+        <trackClusterAssociationAlgorithms>
+            <algorithm type = "TrackClusterAssociation"/>
+            <algorithm type = "LoopingTrackAssociation"/>
+            <algorithm type = "TrackRecovery"/>
+            <algorithm type = "TrackRecoveryHelix"/>
+            <algorithm type = "TrackRecoveryInteractions"/>
+        </trackClusterAssociationAlgorithms>
+    </algorithm>
+
+    <!--algorithm type = "MainFragmentRemoval"/>
+    <algorithm type = "NeutralFragmentRemoval"/>
+    <algorithm type = "PhotonFragmentRemoval"/-->
+
+    <algorithm type = "ClusterPreparation">
+        <CandidateListNames>PrimaryClusters</CandidateListNames>
+        <MergedCandidateListName>PfoCreation</MergedCandidateListName>
+    </algorithm>
+
+    <!--algorithm type = "PhotonSplitting"/>
+    <algorithm type = "PhotonFragmentMerging"/-->
+
+    <!-- Create particle flow objects -->
+    <algorithm type = "ForceSplitTrackAssociations"/>
+    <algorithm type = "PfoCreation">
+        <OutputPfoListName>PrimaryAndPhotonPfos</OutputPfoListName>
+    </algorithm>
+
+    <algorithm type = "PfoPreparation">
+        <CandidateListNames>PrimaryAndPhotonPfos</CandidateListNames>
+        <MergedCandidateListName>OutputPfos</MergedCandidateListName>
+    </algorithm>
+
+    <!-- Particle flow object modification algorithms -->
+    <algorithm type = "FinalParticleId"/>
+    <algorithm type = "V0PfoCreation"/>
+    <!--algorithm type = "DumpPfosMonitoring"/-->
+    <!--algorithm type = "VisualMonitoring"/-->   
+</pandora>
