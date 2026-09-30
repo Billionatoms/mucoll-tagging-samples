@@ -1,0 +1,7 @@
+build/
+install/
+logs/
+*.root
+*.slcio
+*.h5
+__pycache__/

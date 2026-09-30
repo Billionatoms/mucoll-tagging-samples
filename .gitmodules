@@ -1,0 +1,4 @@
+[submodule "LCTuple"]
+	path = LCTuple
+	url = https://github.com/Billionatoms/LCTuple.git
+	branch = music10Tev-fixes
