@@ -5,3 +5,4 @@ logs/
 *.slcio
 *.h5
 __pycache__/
+config/site.local.env
