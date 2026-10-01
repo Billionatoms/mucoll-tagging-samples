@@ -88,7 +88,7 @@ JET_kt_LCTuple.OutputLevel = INFO
 JET_kt_LCTuple.ProcessorType = "LCTuple"
 JET_kt_LCTuple.Parameters = {
     "MCParticleCollection": [ '  ' ],
-    "RecoParticleCollection": ["SelectedPandoraPFO"],
+    "RecoParticleCollection": ["SelectedPandoraPFOs"],
     "JetCollection": [ "JetOut_kt" ],
     "WriteJetCollectionParameters": ["true"],
     "JetCollectionDaughtersParameters": ["true"],
