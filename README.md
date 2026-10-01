@@ -50,6 +50,9 @@ Jobs refuse to run if the LCTuple build does not match the pinned submodule comm
 whose outputs already exist (`--force` to redo), validate the ntuple before publishing it, and stamp
 it with a `mts_provenance` TNamed (repo and LCTuple commits, image hash, input, date).
 
+Checks for the outputs (generator record truncation, stale values, file-to-file comparison) are in
+`validation/`, see `validation/README.md`.
+
 ## Licence
 
 GPL-3.0, matching LCTuple.
