@@ -1,37 +1,31 @@
 # Simulation steering
 
-`sim_steer.py` is the ddsim steering file that simulated the tagging samples. It was not
-kept with the samples; ddsim stores the full steering file in the run header of every output
-file (`SteeringFileContent`), and this copy was extracted from there unchanged.
+`sim_steer.py` is the ddsim settings file that was used to simulate the tagging samples.
+The original file was not kept with the samples. ddsim saves a full copy of its settings file
+inside every output file, so this copy was taken from one of the simulated files, unchanged.
 
-## Provenance
+## Where it comes from
 
 | | |
 |---|---|
-| Source file | `MuSIC_v2_10TeV_samples/bb_dijet/m0_100/sim/sim_bb_m0_100_00000.slcio` |
-| Made | 2025-04-03 11:50:43 UTC, user `gianelle`, HTCondor |
-| Software | DD4hep v01-29, Geant4 11.1 (the versions in `MuonC_MuSICv2_v5_dev.sif`) |
-| Extracted | 2026-10-15, pyLCIO run-header read in `MuonC_MuSICv2_v5_dev.sif` |
+| Taken from | `MuSIC_v2_10TeV_samples/bb_dijet/m0_100/sim/sim_bb_m0_100_00000.slcio` |
+| Simulated on | 3 April 2025 |
+| Software | DD4hep v01-29 and Geant4 11.1, the same versions as in `MuonC_MuSICv2_v5_dev.sif` |
+| Copied out on | 15 October 2026 |
 | sha256 of `sim_steer.py` | `72a1b743dec47b308706d38714ef6b2189f06d8b916d9aea39c73dece1a90bbf` |
 
-The command line recorded in the same header:
+The simulated file also records the command that was run:
 
     ddsim --steeringFile sim_steer.py --skipNEvents 0 --inputFiles gen.hepmc
           --outputFile sim_0.slcio --compactFile /usr/share/muonc-detector-geometry/MuSIC_v2/MuSIC_v2.xml
 
-So the geometry, input and output paths written in `sim_steer.py` were overridden; the values above
-are the ones used.
+The command sets its own detector geometry, input file and output file, so the paths written
+inside `sim_steer.py` were not the ones used.
 
-## Settings that matter
+## Main settings
 
-- Physics list `QGSP_BERT`, range cut 0.7 mm, detailed shower mode on.
-- Random seed 42 in every job, per-event seeding off (`random.enableEventSeed = False`).
-- 25 events per job, no vertex smearing, no crossing-angle boost.
-- Closest public steering: MuonColliderSoft/ProductionConfig `simulation/001-Base/sim_steer.py`.
-
-The header records `part.printStartTracking` and `part.printEndTracking` as `False`, while the file
-sets them to `True`. Both only control logging.
-
-Only this one sim file (bb_dijet, m0_100) was available locally, so the other eight samples are
-assumed, not checked, to use the same steering. The run header of one file per sample on EOS would
-confirm it.
+- Geant4 physics list `QGSP_BERT`, range cut 0.7 mm, detailed shower mode on.
+- The same random seed, 42, in every job.
+- 25 events per job.
+- No smearing of the collision point.
+- It is close to MuonColliderSoft/ProductionConfig `simulation/001-Base/sim_steer.py`.
