@@ -9,6 +9,7 @@ b-tagging studies, using the `MuonC_MuSICv2_v5_dev` apptainer container.
 |---|---|---|
 | `LCTuple/` | Submodule: fork of [MuonColliderSoft/LCTuple](https://github.com/MuonColliderSoft/LCTuple), branch `music10Tev-fixes` | based on tag `MuSICv2-pre04` (045bccc) |
 | `Jet-tagging/` | Reconstruction and ntuple steering, imported from [MuonColliderSoft/Jet-tagging](https://github.com/MuonColliderSoft/Jet-tagging) | upstream `main` at 03741b9 |
+| `sim_steering/` | The ddsim steering that simulated the samples, extracted from a sim file's run header | see `sim_steering/README.md` |
 
 The container ships a precompiled LCTuple from the `music10Tev` branch (around tag `MuSICv2-pre03`).
 The fork fixes bugs in that branch; the rebuilt library replaces the container one at run time
