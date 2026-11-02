@@ -195,10 +195,10 @@ SIM.part.minDistToParentVertex = 2.2e-14
 SIM.part.minimalKineticEnergy = 1.0*MeV
 
 ##  Printout at End of Tracking
-SIM.part.printEndTracking = True
+SIM.part.printEndTracking = False
 
 ##  Printout at Start of Tracking
-SIM.part.printStartTracking = True
+SIM.part.printStartTracking = False
 
 ## List of processes to save, on command line give as whitespace separated string in quotation marks
 SIM.part.saveProcesses = ['Decay']
@@ -240,4 +240,3 @@ SIM.random.luxury = 1
 SIM.random.replace_gRandom = True
 SIM.random.seed = 42
 SIM.random.type = None
-
