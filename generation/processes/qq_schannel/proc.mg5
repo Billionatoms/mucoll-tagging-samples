@@ -1,0 +1,6 @@
+# MadGraph commands for qq_schannel: s-channel mu+ mu- -> Z/gamma* -> u ubar, d dbar, s sbar at 10 TeV.
+# generation/gen_job.py adds the output command.
+import model sm
+# Light = u, d, s: the Z decays found in the official VBF qq_dijet sample.
+define jl = u d s u~ d~ s~
+generate mu+ mu- > jl jl @0

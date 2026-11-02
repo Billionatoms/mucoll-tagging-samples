@@ -1,0 +1,7 @@
+# Run-card cuts for qq_schannel, written into Cards/run_card.dat and checked in the run banner.
+# The cuts of the official VBF qq sample, read off its HepMC (hard-process light quarks):
+# pT > 5 GeV, |eta| < 5, Delta R > 0.4. At 10 TeV the two quarks are back to back
+# with ~5 TeV each, so only the |eta| < 5 edge is ever reached.
+ptj = 5.0
+etaj = 5.0
+drjj = 0.4

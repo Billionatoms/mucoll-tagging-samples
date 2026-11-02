@@ -1,0 +1,4 @@
+# MadGraph commands for bb_schannel: s-channel mu+ mu- -> Z/gamma* -> b bbar at 10 TeV.
+# generation/gen_job.py adds the output command.
+import model sm
+generate mu+ mu- > b b~ @0

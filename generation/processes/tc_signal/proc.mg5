@@ -1,0 +1,8 @@
+# MadGraph commands for tc_signal: mu+ mu- -> t cbar + tbar c through O_lequ^(1)
+# (coefficient clequ1Re2232 = 1, Lambda = 1 TeV, one insertion), as in
+# mucoll-production configs/processes/signal_processes.py. Top and W decays are
+# left to Pythia. {MODEL} is replaced by the job's own copy of the UFO with the
+# derived restriction (see process.env). generation/gen_job.py adds the output command.
+import model {MODEL}
+generate mu+ mu- > t c~ NP=1 @0
+add process mu+ mu- > t~ c NP=1 @1

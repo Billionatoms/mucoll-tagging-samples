@@ -54,6 +54,12 @@ it with a `mts_provenance` TNamed (repo and LCTuple commits, image hash, input, 
 Checks for the outputs (generator record truncation, stale values, file-to-file comparison) are in
 `validation/`, see `validation/README.md`.
 
+## New samples
+
+The s-channel dijets (`bb_schannel`, `cc_schannel`, `qq_schannel`) and the $\mu^+\mu^- \to tc$
+signal (`tc_signal`) are generated and simulated here, then go through the same reco and ntuple
+chain with mass bin `incl`. See `generation/README.md`.
+
 ## Licence
 
 GPL-3.0, matching LCTuple.

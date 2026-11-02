@@ -21,6 +21,11 @@ CONTAINER_LCTUPLE="/usr/lib64/libLCTuple.so"
 SAMPLES=(bb_dijet cc_dijet qq_dijet)
 MASSES=(m0_100 m100_1000 m1000_5000)
 
+# Samples generated and simulated by this repo (generation/, scripts/run_sim.sh).
+# One bin each; "all" in the batch submitters still means the official samples.
+GEN_SAMPLES=(bb_schannel cc_schannel qq_schannel tc_signal)
+GEN_BIN=incl
+
 # --- logging ---------------------------------------------------------------
 _c() { if [[ -t 1 ]]; then printf '\033[%sm%s\033[0m\n' "$1" "$2"; else printf '%s\n' "$2"; fi; }
 red()  { _c 31 "$*"; }
@@ -138,6 +143,10 @@ mts_publish() {  # <local src> <dst>
 }
 
 mts_check_sample() {
-  [[ " ${SAMPLES[*]} " == *" $1 "* ]] || die "unknown sample '$1' (expected: ${SAMPLES[*]})"
+  if [[ " ${GEN_SAMPLES[*]} " == *" $1 "* ]]; then
+    [[ "$2" == "$GEN_BIN" ]] || die "sample '$1' has one bin, '$GEN_BIN' (got '$2')"
+    return 0
+  fi
+  [[ " ${SAMPLES[*]} " == *" $1 "* ]] || die "unknown sample '$1' (expected: ${SAMPLES[*]} ${GEN_SAMPLES[*]})"
   [[ " ${MASSES[*]} "  == *" $2 "* ]] || die "unknown mass bin '$2' (expected: ${MASSES[*]})"
 }

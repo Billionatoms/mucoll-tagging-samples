@@ -1,0 +1,7 @@
+# Run-card cuts for tc_signal, as in mucoll-production. mmjj and drjj need two
+# jets and the signal has one, so MadGraph's card has no such entries: the job
+# records them as inapplicable.
+ptj = 20.0
+etaj = 5.0
+mmjj = 20.0
+drjj = 0.0

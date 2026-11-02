@@ -1,0 +1,8 @@
+# Run-card cuts for bb_schannel, written into Cards/run_card.dat and checked in the run banner.
+# The cuts of the official VBF bb sample, read off its HepMC (hard-process b quarks):
+# pT > 5 GeV, no |eta| or Delta R cut. The "no cut" values are set explicitly so a
+# change in MadGraph's template cannot add one. At 10 TeV the two b quarks are
+# back to back with ~5 TeV each, so the pT cut is never reached.
+ptb = 5.0
+etab = -1.0
+drbb = 0.0
