@@ -3,15 +3,17 @@
 The official MuSIC samples come as simulated files. The samples here are generated and simulated by
 this repo, then reconstructed and ntupled by the unchanged chain (`scripts/run_job.sh`):
 
-| sample | process | MadGraph process |
-|---|---|---|
-| `bb_schannel` | s-channel $b\bar b$ dijets | `mu+ mu- > b b~` |
-| `cc_schannel` | s-channel $c\bar c$ dijets | `mu+ mu- > c c~` |
-| `qq_schannel` | s-channel light dijets | `mu+ mu- > jl jl`, jl = u, d, s |
-| `tc_signal` | $\mu^+\mu^- \to t\bar c + \bar t c$ through $O_{lequ}^{(1)}$ | `mu+ mu- > t c~ NP=1`, `mu+ mu- > t~ c NP=1` |
+| sample | process | MadGraph process | directory |
+|---|---|---|---|
+| `bb_schannel` | s-channel $b\bar b$ dijets | `mu+ mu- > b b~` | `s-channel/dijets/bb_dijets` |
+| `cc_schannel` | s-channel $c\bar c$ dijets | `mu+ mu- > c c~` | `s-channel/dijets/cc_dijets` |
+| `qq_schannel` | s-channel light dijets | `mu+ mu- > jl jl`, jl = u, d, s | `s-channel/dijets/qq_dijets` |
+| `tc_signal` | $\mu^+\mu^- \to t\bar c + \bar t c$ through $O_{lequ}^{(1)}$ | `mu+ mu- > t c~ NP=1`, `mu+ mu- > t~ c NP=1` | `s-channel/mumutc` |
 
 All at $\sqrt{s} = 10$ TeV with fixed-energy beams, as the official VBF samples. Each sample has a
-single bin, `incl`.
+single bin, `incl`, and its directory (`GEN_SAMPLE_DIRS` in `scripts/common.sh`) holds `gen/`,
+`sim/`, `reco/` and `ntuples/`. On Artemis the directories are under
+`/mnt/lustre/scratch/epp/$USER/new_mucoll_samples`.
 
 ## Chain
 
@@ -122,8 +124,14 @@ seed and every file can be remade.
 
 ## Outputs
 
-    $GEN_ROOT/<sample>/incl/gen/gen_<q>_incl_<jjjj>.{hepmc3,json,cards.tgz}
-    $DATA_ROOT/<sample>/incl/sim/sim_<q>_incl_<iiiii>.{slcio,json}
+    $GEN_ROOT/<dir>/gen/gen_<q>_incl_<jjjj>.{hepmc3,json,cards.tgz}
+    $DATA_ROOT/<dir>/sim/sim_<q>_incl_<iiiii>.{slcio,json}
+    $OUT_ROOT/<dir>/reco/reco_<q>_incl_<iiiii>.slcio
+    $OUT_ROOT/<dir>/ntuples/tuples_<q>_incl_<iiiii>.root
+
+with `<dir>` from the table at the top, e.g. on Artemis
+`/mnt/lustre/scratch/epp/$USER/new_mucoll_samples/s-channel/dijets/bb_dijets/sim/`. `GEN_ROOT`,
+`DATA_ROOT` and `OUT_ROOT` are all `new_mucoll_samples` there.
 
 The `.json` files hold the provenance: seeds, cross-section, cuts requested and used, image and repo
 commits, and for sim files the HepMC3 file and events they came from.

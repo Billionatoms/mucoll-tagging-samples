@@ -25,6 +25,13 @@ MASSES=(m0_100 m100_1000 m1000_5000)
 # One bin each; "all" in the batch submitters still means the official samples.
 GEN_SAMPLES=(bb_schannel cc_schannel qq_schannel tc_signal)
 GEN_BIN=incl
+# Their directories under each data root, each holding gen/ sim/ reco/ ntuples/.
+declare -A GEN_SAMPLE_DIRS=(
+  [bb_schannel]=s-channel/dijets/bb_dijets
+  [cc_schannel]=s-channel/dijets/cc_dijets
+  [qq_schannel]=s-channel/dijets/qq_dijets
+  [tc_signal]=s-channel/mumutc
+)
 
 # --- logging ---------------------------------------------------------------
 _c() { if [[ -t 1 ]]; then printf '\033[%sm%s\033[0m\n' "$1" "$2"; else printf '%s\n' "$2"; fi; }
@@ -149,4 +156,15 @@ mts_check_sample() {
   fi
   [[ " ${SAMPLES[*]} " == *" $1 "* ]] || die "unknown sample '$1' (expected: ${SAMPLES[*]} ${GEN_SAMPLES[*]})"
   [[ " ${MASSES[*]} "  == *" $2 "* ]] || die "unknown mass bin '$2' (expected: ${MASSES[*]})"
+}
+
+# mts_sample_dirs <sample> <mass> -- sets SAMPLE_DIR (relative to a data root) and
+# the RECO_SUBDIR and TUPLE_SUBDIR inside it. Official samples keep
+# <sample>/<mass>/{recoSig,$NTUPLE_SUBDIR}; generated ones use GEN_SAMPLE_DIRS.
+mts_sample_dirs() {
+  if [[ -n "${GEN_SAMPLE_DIRS[$1]:-}" ]]; then
+    SAMPLE_DIR="${GEN_SAMPLE_DIRS[$1]}"; RECO_SUBDIR=reco; TUPLE_SUBDIR=ntuples
+  else
+    SAMPLE_DIR="$1/$2"; RECO_SUBDIR=recoSig; TUPLE_SUBDIR="$NTUPLE_SUBDIR"
+  fi
 }

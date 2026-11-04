@@ -23,8 +23,10 @@
 # and seed SIM_SEED_BASE + <index>. The output is checked
 # event by event against the HepMC3 file (scripts/check_sim.py) before it is
 # published where scripts/run_job.sh --mode reco reads it:
-#   $DATA_ROOT/<sample>/incl/sim/sim_<q>_incl_<NNNNN>.slcio
-#   $DATA_ROOT/<sample>/incl/sim/sim_<q>_incl_<NNNNN>.json   (provenance)
+#   $DATA_ROOT/<dir>/sim/sim_<q>_incl_<NNNNN>.slcio
+#   $DATA_ROOT/<dir>/sim/sim_<q>_incl_<NNNNN>.json   (provenance)
+# where <dir> is the sample's GEN_SAMPLE_DIRS entry in scripts/common.sh, e.g.
+# s-channel/dijets/bb_dijets. The input is $GEN_ROOT/<dir>/gen/.
 # ---------------------------------------------------------------------------
 set -euo pipefail
 MTS_TAG=sim
@@ -59,9 +61,10 @@ SEED=$(( SIM_SEED_BASE + IDX ))
 Q="${SAMPLE%%_*}"
 GEN_STEM="${Q}_${GEN_BIN}_$(printf '%04d' "$JOB")"
 STEM="${Q}_${GEN_BIN}_$(printf '%05d' "$IDX")"
-GEN_DIR="$GEN_ROOT/$SAMPLE/$GEN_BIN/gen"
+mts_sample_dirs "$SAMPLE" "$GEN_BIN"
+GEN_DIR="$GEN_ROOT/$SAMPLE_DIR/gen"
 IN_HEPMC="$GEN_DIR/gen_${GEN_STEM}.hepmc3"
-OUT_DIR="$DATA_ROOT/$SAMPLE/$GEN_BIN/sim"
+OUT_DIR="$DATA_ROOT/$SAMPLE_DIR/sim"
 OUT_SIM="$OUT_DIR/sim_${STEM}.slcio"
 STEER="$MTS_REPO/sim_steering/sim_steer.py"
 COMPACT=/usr/share/muonc-detector-geometry/MuSIC_v2/MuSIC_v2.xml

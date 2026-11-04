@@ -18,10 +18,12 @@
 # inside $GEN_IMAGE. The seed is GEN_SEED_BASE + <job>.
 #
 # Output, published only if every check in gen_job.py passed:
-#   $GEN_ROOT/<sample>/incl/gen/gen_<q>_incl_<JJJJ>.hepmc3
-#   $GEN_ROOT/<sample>/incl/gen/gen_<q>_incl_<JJJJ>.json      (metadata + provenance)
-#   $GEN_ROOT/<sample>/incl/gen/gen_<q>_incl_<JJJJ>.cards.tgz (MadGraph cards, run
-#                                                              banner, Pythia command file, logs)
+#   $GEN_ROOT/<dir>/gen/gen_<q>_incl_<JJJJ>.hepmc3
+#   $GEN_ROOT/<dir>/gen/gen_<q>_incl_<JJJJ>.json      (metadata + provenance)
+#   $GEN_ROOT/<dir>/gen/gen_<q>_incl_<JJJJ>.cards.tgz (MadGraph cards, run banner,
+#                                                      Pythia command file, logs)
+# where <dir> is the sample's GEN_SAMPLE_DIRS entry in scripts/common.sh, e.g.
+# s-channel/dijets/bb_dijets.
 # ---------------------------------------------------------------------------
 set -euo pipefail
 MTS_TAG=gen
@@ -54,7 +56,8 @@ EVENTS="${EVENTS:-$EVENTS_PER_JOB}"
 SEED=$(( GEN_SEED_BASE + 10#$JOB ))
 Q="${SAMPLE%%_*}"
 STEM="${Q}_${GEN_BIN}_$(printf '%04d' "$((10#$JOB))")"
-OUT_DIR="$GEN_ROOT/$SAMPLE/$GEN_BIN/gen"
+mts_sample_dirs "$SAMPLE" "$GEN_BIN"
+OUT_DIR="$GEN_ROOT/$SAMPLE_DIR/gen"
 OUT_HEPMC="$OUT_DIR/gen_${STEM}.hepmc3"
 
 UFO_ARGS=(); UFO_BIND=()

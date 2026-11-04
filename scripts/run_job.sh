@@ -9,8 +9,9 @@
 #
 # Usage:
 #   MTS_SITE=<site> scripts/run_job.sh <sample> <mass> <index> [options]
-#     <sample>   bb_dijet | cc_dijet | qq_dijet
-#     <mass>     m0_100 | m100_1000 | m1000_5000
+#     <sample>   bb_dijet | cc_dijet | qq_dijet, or a generated sample
+#                (bb_schannel | cc_schannel | qq_schannel | tc_signal)
+#     <mass>     m0_100 | m100_1000 | m1000_5000, or incl for a generated sample
 #     <index>    file index, e.g. 0 -> _00000
 #   options:
 #     --mode reco|ntuple   (default reco)
@@ -19,7 +20,9 @@
 #     --keep-workdir       keep the scratch work directory for debugging
 #
 # Paths come from config/sites/$MTS_SITE.env; any of DATA_ROOT, RECO_ROOT,
-# OUT_ROOT may be a local path or a root:// URL. Remote inputs are staged to the
+# OUT_ROOT may be a local path or a root:// URL. Under each root an official
+# sample lives in <sample>/<mass>/{sim,recoSig,ntuple} and a generated one in its
+# GEN_SAMPLE_DIRS entry/{sim,reco,ntuples} (scripts/common.sh). Remote inputs are staged to the
 # work directory with xrdcp; remote outputs are copied back with xrdcp.
 #
 # Each job runs k4run in its own work directory (with a conf/ symlink the
@@ -56,16 +59,17 @@ mts_check_sample "$SAMPLE" "$MASS"
 Q="${SAMPLE%%_*}"
 SUFFIX="$(printf '%05d' "$((10#$INDEX))")"
 STEM="${Q}_${MASS}_${SUFFIX}"
-BIN="$SAMPLE/$MASS"
+mts_sample_dirs "$SAMPLE" "$MASS"
+BIN="$SAMPLE_DIR"
 
-OUT_TUPLE="$OUT_ROOT/$BIN/$NTUPLE_SUBDIR/tuples_${STEM}.root"
+OUT_TUPLE="$OUT_ROOT/$BIN/$TUPLE_SUBDIR/tuples_${STEM}.root"
 if [[ "$MODE" == reco ]]; then
   STEER_FILE=reco_steer_jets.py
   INPUT="$DATA_ROOT/$BIN/sim/sim_${STEM}.slcio"
-  OUT_RECO="$OUT_ROOT/$BIN/recoSig/reco_${STEM}.slcio"
+  OUT_RECO="$OUT_ROOT/$BIN/$RECO_SUBDIR/reco_${STEM}.slcio"
 else
   STEER_FILE=ntuple_only.py
-  INPUT="$RECO_ROOT/$BIN/recoSig/reco_${STEM}.slcio"
+  INPUT="$RECO_ROOT/$BIN/$RECO_SUBDIR/reco_${STEM}.slcio"
   OUT_RECO=""
 fi
 
