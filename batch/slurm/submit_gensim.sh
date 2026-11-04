@@ -18,10 +18,12 @@
 #     SBATCH_EXTRA="--mem=48G --time=2-00:00:00" batch/slurm/submit_gensim.sh sim tc_signal --range 0-3
 #
 # Logs: logs/slurm/<stage>_<sample>_<jobid>_<task>.{out,err}
-# Resources: gen 4 CPU, 8 GB, 12 h (10,000 events take minutes for the s-channel
-# processes); sim 1 CPU (ddsim is single-threaded), 8 GB, 6 h: on the laptop
-# bb_schannel took 48 s start-up plus ~120 s and 4.9 GB per event, so ~50 min per
-# 25 events. Check the time on a few tasks on Artemis before submitting thousands.
+# Resources: gen 4 CPU, 8 GB, 2 h (100 events took 6 s for the s-channel processes
+# and 33 s for tc_signal on the laptop); sim 1 CPU (ddsim is single-threaded),
+# 8 GB, 4 h: on the laptop bb_schannel took 48 s start-up plus ~120 s and 4.9 GB
+# per event, so ~50 min per 25 events. Artemis rejects time limits above its
+# partition maximum; 4 h is what the earlier reco arrays used there. Check the
+# time on a few tasks on Artemis before submitting thousands.
 # ---------------------------------------------------------------------------
 set -euo pipefail
 MTS_TAG=slurm
@@ -34,7 +36,7 @@ while [[ $# -gt 0 ]]; do
     --max-running) MAXRUN="$2"; shift 2 ;;
     --site) SITE="$2"; shift 2 ;;
     --dry-run) DRY=1; shift ;;
-    -h|--help) sed -n '2,25p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,27p' "$0"; exit 0 ;;
     -*) die "unknown option $1" ;;
     *) POS+=("$1"); shift ;;
   esac
@@ -45,8 +47,8 @@ STAGE="${POS[0]}"; SAMPLE="${POS[1]}"
 [[ "$RANGE" =~ ^[0-9]+-[0-9]+$ ]] || die "--range A-B is required"
 [[ -n "${SLURM_JOB_ID:-}" ]] && die "do not run the submitter inside a Slurm job"
 
-if [[ "$STAGE" == gen ]]; then RES=(--time=12:00:00 --cpus-per-task=4 --mem=8G)
-else                           RES=(--time=06:00:00 --cpus-per-task=1 --mem=8G); fi
+if [[ "$STAGE" == gen ]]; then RES=(--time=02:00:00 --cpus-per-task=4 --mem=8G)
+else                           RES=(--time=04:00:00 --cpus-per-task=1 --mem=8G); fi
 
 # Fail early (on the login node) rather than in hundreds of jobs.
 MTS_SITE="$SITE" mts_load_site
