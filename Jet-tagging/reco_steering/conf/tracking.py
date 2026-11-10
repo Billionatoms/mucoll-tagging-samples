@@ -69,7 +69,9 @@ CKFTrackingNoIl.OutputLevel = INFO
 CKFTrackingNoIl.ProcessorType = "ACTSSeededCKFTrackingProc"
 CKFTrackingNoIl.Parameters = {
     "DetectorSchema": [ DETSCHEMA ],
-    "CKF_Chi2CutOff": ["10"],
+    # Maximum local chi2 per measurement. At 10, stiff (hundreds of GeV and up) tracks lost their
+    # tracker hits after the vertex detector and were then dropped by MinNdf (10 Nov 2026)
+    "CKF_Chi2CutOff": ["100"],
     "CKF_NumMeasurementsCutOff": ["1"],
     "MatFile": [ MATFILE ],
     "PropagateBackward": ["False"],
@@ -111,7 +113,7 @@ CKFTrackingFilteredHits.OutputLevel = INFO
 CKFTrackingFilteredHits.ProcessorType = "ACTSSeededCKFTrackingProc"
 CKFTrackingFilteredHits.Parameters = {
     "DetectorSchema": [ DETSCHEMA ],
-    "CKF_Chi2CutOff": ["10"],
+    "CKF_Chi2CutOff": ["100"], # as CKFTrackingNoIl (10 Nov 2026)
     "CKF_NumMeasurementsCutOff": ["1"],
     "MatFile": [ MATFILE ],
     "PropagateBackward": ["False"],
@@ -230,6 +232,7 @@ FilterTracksCone.Parameters = {
     "Chi2Spatial":  ["0.1"], # Spatial chi squared
     "InputTrackCollectionName": [ TRK_ACTS_c ],
     "MinPt": ["0.5"], # Minimum transverse momentum
+    "MaxPt": ["1000000"], # Maximum transverse momentum; the 1000 GeV default removed every stiffer track (10 Nov 2026)
     "NHitsInner": ["-1"], # Minimum number of hits on inner tracker
     "NHitsOuter": ["-1"], # Minimum number of hits on outer tracker
     "NHitsVertex": ["2"], # Minimum number of hits on vertex detector   !!(AT LEAST 3 HITS IN VXD, OTHERWISE NO RELIABLE D0-Z0)!!

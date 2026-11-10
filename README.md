@@ -8,8 +8,24 @@ b-tagging studies, using the `MuonC_MuSICv2_v5_dev` apptainer container.
 | Path | What | Version |
 |---|---|---|
 | `LCTuple/` | Submodule: fork of [MuonColliderSoft/LCTuple](https://github.com/MuonColliderSoft/LCTuple), branch `music10Tev-fixes` | based on tag `MuSICv2-pre04` (045bccc) |
-| `Jet-tagging/` | Reconstruction and ntuple steering, imported from [MuonColliderSoft/Jet-tagging](https://github.com/MuonColliderSoft/Jet-tagging) | upstream `main` at 03741b9 |
+| `Jet-tagging/` | Reconstruction and ntuple steering, imported from [MuonColliderSoft/Jet-tagging](https://github.com/MuonColliderSoft/Jet-tagging) | upstream `main` at 03741b9, with the two tracking changes below |
 | `sim_steering/` | The ddsim steering that simulated the samples, extracted from a sim file's run header | see `sim_steering/README.md` |
+
+**Local changes to the reco steering (10 Nov 2026).** Two tracking settings differ from upstream, because
+the upstream ones lose stiff tracks and leave the reco jets at about half the truth-jet energy:
+
+- `FilterTrk` (`reco_steer_jets.py`) and `FilterTracksCone` (`conf/tracking.py`) set `MaxPt` to 10⁶ GeV.
+  `FilterTracks` on the `music10Tev` branch of MarlinTrkProcessors defaults to 1000 GeV (commit
+  `692194c7`), which removed every track above 1 TeV $p_T$.
+- `CKFTrackingNoIl` and `CKFTrackingFilteredHits` (`conf/tracking.py`) set `CKF_Chi2CutOff` to 100
+  instead of 10. At 10, tracks of a few hundred GeV and up lost their tracker hits after the vertex
+  detector and were then removed by `MinNdf`.
+
+On 100 full-sim tc events the two together raise the charged jet energy from 0.48 to 0.73 of truth and
+the jet response from 0.51 to 0.65; single $\pi^+$ of 500 GeV and 2 TeV reach Pandora in 95% and 98% of
+events instead of 61% and 0%. The calorimeter calibration is not changed yet: with the HCAL outside the
+solenoid, Pandora does not attach a charged hadron's HCAL shower to its track, so a correct hadronic scale
+would double count. Samples reconstructed before this change used the upstream settings.
 
 The container ships a precompiled LCTuple from the `music10Tev` branch (around tag `MuSICv2-pre03`).
 The fork fixes bugs in that branch; the rebuilt library replaces the container one at run time
