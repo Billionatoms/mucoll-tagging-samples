@@ -75,7 +75,7 @@ info "input  : $IN_HEPMC"
 info "output : $OUT_SIM"
 echo "========================================================================"
 
-if [[ "$FORCE" != 1 ]] && mts_exists "$OUT_SIM" && mts_exists "$OUT_DIR/sim_${STEM}.json"; then
+if [[ "$FORCE" != 1 ]] && mts_exists "$OUT_SIM" && mts_exists "$OUT_DIR/sim_${STEM}.json" 0; then
   grn "[sim] SKIP: output already exists (use --force to redo)"; exit 0
 fi
 [[ -f "$IMAGE" ]] || die "container image not found: $IMAGE"

@@ -121,11 +121,13 @@ is_remote() { [[ "$1" == root://* ]]; }
 xrd_host()  { local u="${1#root://}"; echo "${u%%/*}"; }
 xrd_path()  { local u="${1#root://}"; echo "/${u#*/}"; }
 
-mts_exists() {  # non-trivial output already there?
+# Output already there? A local file must be larger than <min bytes> (default
+# 10000, to catch truncated data files); pass 0 for small files such as the .json.
+mts_exists() {  # <path> [min bytes]
   if is_remote "$1"; then
     "$XRDFS" "$(xrd_host "$1")" stat "$(xrd_path "$1")" >/dev/null 2>&1
   else
-    [[ -f "$1" && $(stat -c%s "$1" 2>/dev/null || echo 0) -gt 10000 ]]
+    [[ -f "$1" && $(stat -c%s "$1" 2>/dev/null || echo 0) -gt ${2:-10000} ]]
   fi
 }
 

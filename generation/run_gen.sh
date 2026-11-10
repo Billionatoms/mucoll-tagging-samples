@@ -72,7 +72,7 @@ info "site $MTS_SITE | $SAMPLE job $JOB | $EVENTS events | seed $SEED | $CORES c
 info "output : $OUT_HEPMC"
 echo "========================================================================"
 
-if [[ "$FORCE" != 1 ]] && mts_exists "$OUT_HEPMC" && mts_exists "$OUT_DIR/gen_${STEM}.json"; then
+if [[ "$FORCE" != 1 ]] && mts_exists "$OUT_HEPMC" && mts_exists "$OUT_DIR/gen_${STEM}.json" 0; then
   grn "[gen] SKIP: output already exists (use --force to redo)"; exit 0
 fi
 [[ -f "$GEN_IMAGE" ]] || die "generator image not found: $GEN_IMAGE"
