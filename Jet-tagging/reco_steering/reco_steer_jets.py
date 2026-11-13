@@ -160,9 +160,6 @@ FilterTrk_jets.Parameters = {
     "Chi2Spatial":  ["0.1"], # Spatial chi squared
     "InputTrackCollectionName": [ TRK_ACTS ],
     "MinPt": ["0.5"], # Minimum transverse momentum
-    # Maximum transverse momentum. FilterTracks on the music10Tev branch defaults to 1000 GeV,
-    # which removed every track above 1 TeV; set far above the 5 TeV beam energy (10 Nov 2026)
-    "MaxPt": ["1000000"],
     "NHitsInner": ["-1"], # Minimum number of hits on inner tracker
     "NHitsOuter": ["-1"], # Minimum number of hits on outer tracker
     "NHitsVertex": ["0"], # Minimum number of hits on vertex detector

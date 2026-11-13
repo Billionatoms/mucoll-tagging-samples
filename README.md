@@ -8,24 +8,29 @@ b-tagging studies, using the `MuonC_MuSICv2_v5_dev` apptainer container.
 | Path | What | Version |
 |---|---|---|
 | `LCTuple/` | Submodule: fork of [MuonColliderSoft/LCTuple](https://github.com/MuonColliderSoft/LCTuple), branch `music10Tev-fixes` | based on tag `MuSICv2-pre04` (045bccc) |
-| `Jet-tagging/` | Reconstruction and ntuple steering, imported from [MuonColliderSoft/Jet-tagging](https://github.com/MuonColliderSoft/Jet-tagging) | upstream `main` at 03741b9, with the two tracking changes below |
+| `Jet-tagging/` | Reconstruction and ntuple steering, imported from [MuonColliderSoft/Jet-tagging](https://github.com/MuonColliderSoft/Jet-tagging) | upstream `main` at 03741b9 |
 | `sim_steering/` | The ddsim steering that simulated the samples, extracted from a sim file's run header | see `sim_steering/README.md` |
 
-**Local changes to the reco steering (10 Nov 2026).** Two tracking settings differ from upstream, because
-the upstream ones lose stiff tracks and leave the reco jets at about half the truth-jet energy:
+**Known limitation of the reco steering: stiff tracks are lost.** The tracking settings are the upstream
+defaults, the same as for the official VBF training samples, and they keep reco jets at about half the
+truth-jet energy in these 10 TeV samples:
 
-- `FilterTrk` (`reco_steer_jets.py`) and `FilterTracksCone` (`conf/tracking.py`) set `MaxPt` to 10⁶ GeV.
-  `FilterTracks` on the `music10Tev` branch of MarlinTrkProcessors defaults to 1000 GeV (commit
-  `692194c7`), which removed every track above 1 TeV $p_T$.
-- `CKFTrackingNoIl` and `CKFTrackingFilteredHits` (`conf/tracking.py`) set `CKF_Chi2CutOff` to 100
-  instead of 10. At 10, tracks of a few hundred GeV and up lost their tracker hits after the vertex
-  detector and were then removed by `MinNdf`.
+- `FilterTrk` (`reco_steer_jets.py`) and `FilterTracksCone` (`conf/tracking.py`) leave `MaxPt` at the
+  `FilterTracks` default of 1000 GeV (`music10Tev` branch of MarlinTrkProcessors, commit `692194c7`),
+  which removes every track above 1 TeV $p_T$.
+- `CKF_Chi2CutOff` stays at 10. At 10, tracks of a few hundred GeV and up lose their tracker hits after
+  the vertex detector and are then removed by `MinNdf`.
 
-On 100 full-sim tc events the two together raise the charged jet energy from 0.48 to 0.73 of truth and
-the jet response from 0.51 to 0.65; single $\pi^+$ of 500 GeV and 2 TeV reach Pandora in 95% and 98% of
-events instead of 61% and 0%. The calorimeter calibration is not changed yet: with the HCAL outside the
-solenoid, Pandora does not attach a charged hadron's HCAL shower to its track, so a correct hadronic scale
-would double count. Samples reconstructed before this change used the upstream settings.
+Lifting `MaxPt` and raising the cut-off to 100 was tried on 10 Nov 2026 (commit `70023c4`): on 100
+full-sim tc events the charged jet energy went from 0.48 to 0.73 of truth and the jet response from 0.51
+to 0.65. It was undone on 13 Nov 2026, as agreed in the supervisor meeting that day: above 1 TeV, with
+the beam-induced background in the event, fake tracks far outnumber real ones, and the cut was tuned with
+the detector full of BIB hits, which signal-only simulation does not show. Any change has to be agreed
+with the people who tune the MuSIC tracking. The calorimeter calibration was not changed either: with the
+HCAL outside the solenoid, Pandora's default clustering and track-cluster association cuts cannot span
+the coil gap, so a charged hadron's HCAL shower is left as a neutral hadron and a correct hadronic scale
+would double count. Anything reconstructed with commit `70023c4` in place used the changed tracking and
+does not match the other samples.
 
 The container ships a precompiled LCTuple from the `music10Tev` branch (around tag `MuSICv2-pre03`).
 The fork fixes bugs in that branch; the rebuilt library replaces the container one at run time
