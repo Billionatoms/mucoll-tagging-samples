@@ -20,8 +20,10 @@
 # Logs: logs/slurm/<stage>_<sample>_<jobid>_<task>.{out,err}
 # Resources: gen 4 CPU, 8 GB, 2 h (100 events took 6 s for the s-channel processes
 # and 33 s for tc_signal on the laptop); sim 1 CPU (ddsim is single-threaded),
-# 8 GB, 4 h: on the laptop bb_schannel took 48 s start-up plus ~120 s and 4.9 GB
-# per event, so ~50 min per 25 events. Artemis rejects time limits above its
+# 16 GB, 4 h: on the laptop bb_schannel took 48 s start-up plus ~120 s and 4.9 GB
+# per event, so ~50 min per 25 events. With 8 GB, 19 of the first 4,000 bb_schannel
+# sim files on Artemis were killed for running out of memory (13 Nov 2026), so the
+# heaviest events need more. Artemis rejects time limits above its
 # partition maximum; 4 h is what the earlier reco arrays used there. Check the
 # time on a few tasks on Artemis before submitting thousands.
 # ---------------------------------------------------------------------------
@@ -48,7 +50,7 @@ STAGE="${POS[0]}"; SAMPLE="${POS[1]}"
 [[ -n "${SLURM_JOB_ID:-}" ]] && die "do not run the submitter inside a Slurm job"
 
 if [[ "$STAGE" == gen ]]; then RES=(--time=02:00:00 --cpus-per-task=4 --mem=8G)
-else                           RES=(--time=04:00:00 --cpus-per-task=1 --mem=8G); fi
+else                           RES=(--time=04:00:00 --cpus-per-task=1 --mem=16G); fi
 
 # Fail early (on the login node) rather than in hundreds of jobs.
 MTS_SITE="$SITE" mts_load_site
